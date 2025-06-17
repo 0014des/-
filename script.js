@@ -4,14 +4,16 @@ const clearBtn = document.getElementById('clear');
 const equalsBtn = document.getElementById('equals');
 
 let currentInput = '';
-let lastResult = null;
 
 function updateDisplay(value) {
   display.textContent = value;
-  // アニメーションを一瞬リセットして再生
   display.style.animation = 'none';
   display.offsetHeight; // reflow
   display.style.animation = 'slideInFromRight 0.4s ease forwards';
+}
+
+function isOperator(char) {
+  return ['+', '-', '*', '/'].includes(char);
 }
 
 buttons.forEach(button => {
@@ -20,17 +22,20 @@ buttons.forEach(button => {
     const op = button.getAttribute('data-op');
 
     if (num !== null) {
-      // 数字または小数点を入力
-      if (num === '.' && currentInput.includes('.')) return; // 小数点は1つだけ
+      // 小数点の重複防止
+      if (num === '.' && currentInput.endsWith('.')) return;
+      // 数字・小数点の入力追加
       currentInput += num;
       updateDisplay(currentInput);
     } else if (op !== null) {
-      // 演算子入力
-      if (currentInput === '' && lastResult !== null) {
-        currentInput = lastResult.toString();
+      // 演算子が連続しないようにチェック
+      if (currentInput === '') return;
+      const lastChar = currentInput.slice(-1);
+      if (isOperator(lastChar)) {
+        currentInput = currentInput.slice(0, -1) + op; // 最後の演算子を置き換え
+      } else {
+        currentInput += op;
       }
-      if (currentInput === '') return; // 演算子だけは無視
-      currentInput += op;
       updateDisplay(currentInput);
     }
   });
@@ -38,16 +43,14 @@ buttons.forEach(button => {
 
 clearBtn.addEventListener('click', () => {
   currentInput = '';
-  lastResult = null;
   updateDisplay('0');
 });
 
 equalsBtn.addEventListener('click', () => {
   if (currentInput === '') return;
   try {
-    // 演算結果を評価（安全性は考慮していません）
-    const result = Function(`return ${currentInput}`)();
-    lastResult = result;
+    // evalで計算（単純な計算式のみ対応）
+    const result = eval(currentInput);
     currentInput = result.toString();
     updateDisplay(currentInput);
   } catch (e) {
@@ -55,3 +58,4 @@ equalsBtn.addEventListener('click', () => {
     currentInput = '';
   }
 });
+
