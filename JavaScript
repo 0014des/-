@@ -1,0 +1,57 @@
+const display = document.getElementById('display');
+const buttons = document.querySelectorAll('.btn');
+const clearBtn = document.getElementById('clear');
+const equalsBtn = document.getElementById('equals');
+
+let currentInput = '';
+let lastResult = null;
+
+function updateDisplay(value) {
+  display.textContent = value;
+  // アニメーションを一瞬リセットして再生
+  display.style.animation = 'none';
+  display.offsetHeight; // reflow
+  display.style.animation = 'slideInFromRight 0.4s ease forwards';
+}
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    const num = button.getAttribute('data-num');
+    const op = button.getAttribute('data-op');
+
+    if (num !== null) {
+      // 数字または小数点を入力
+      if (num === '.' && currentInput.includes('.')) return; // 小数点は1つだけ
+      currentInput += num;
+      updateDisplay(currentInput);
+    } else if (op !== null) {
+      // 演算子入力
+      if (currentInput === '' && lastResult !== null) {
+        currentInput = lastResult.toString();
+      }
+      if (currentInput === '') return; // 演算子だけは無視
+      currentInput += op;
+      updateDisplay(currentInput);
+    }
+  });
+});
+
+clearBtn.addEventListener('click', () => {
+  currentInput = '';
+  lastResult = null;
+  updateDisplay('0');
+});
+
+equalsBtn.addEventListener('click', () => {
+  if (currentInput === '') return;
+  try {
+    // 演算結果を評価（安全性は考慮していません）
+    const result = Function(`return ${currentInput}`)();
+    lastResult = result;
+    currentInput = result.toString();
+    updateDisplay(currentInput);
+  } catch (e) {
+    updateDisplay('Error');
+    currentInput = '';
+  }
+});
