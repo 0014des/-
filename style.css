@@ -1,0 +1,131 @@
+/* リセット */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+}
+
+.calculator {
+  background: #222;
+  border-radius: 16px;
+  padding: 20px;
+  width: 320px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+  animation: fadeInScale 0.5s ease forwards;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.display {
+  background: #333;
+  color: #0ff;
+  font-size: 2.5rem;
+  padding: 15px 20px;
+  border-radius: 12px;
+  text-align: right;
+  margin-bottom: 20px;
+  user-select: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  animation: slideInFromRight 0.4s ease forwards;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.btn {
+  background: #444;
+  border: none;
+  border-radius: 12px;
+  padding: 20px 0;
+  font-size: 1.4rem;
+  color: #eee;
+  cursor: pointer;
+  box-shadow: 0 4px #111;
+  transition: background 0.3s, transform 0.1s;
+  user-select: none;
+}
+
+.btn:hover {
+  background: #555;
+}
+
+.btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px #111;
+}
+
+.operator {
+  background: #ff9500;
+  color: white;
+  box-shadow: 0 4px #b26e00;
+}
+
+.operator:hover {
+  background: #ffad33;
+}
+
+.operator:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px #b26e00;
+}
+
+.clear {
+  background: #ff3b30;
+  box-shadow: 0 4px #a02925;
+}
+
+.clear:hover {
+  background: #ff6157;
+}
+
+.clear:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px #a02925;
+}
+
+.equals {
+  background: #34c759;
+  grid-row: span 2;
+  box-shadow: 0 4px #257032;
+}
+
+.equals:hover {
+  background: #5cdb83;
+}
+
+.equals:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px #257032;
+}
